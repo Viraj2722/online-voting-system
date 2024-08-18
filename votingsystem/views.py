@@ -18,3 +18,6 @@ def admin_login(request):
         # Add logic to save political leader and symbol
         return redirect('home')
     return render(request, 'adminlogin.html')
+
+def candidate_list(request):
+    return render(request, 'candidatelist.html')
