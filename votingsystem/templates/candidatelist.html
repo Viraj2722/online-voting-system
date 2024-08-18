@@ -26,6 +26,10 @@
             max-width: 600px;
         }
 
+        a {
+            text-decoration: none;
+        }
+
         h1 {
             text-align: center;
             color: #333;
@@ -97,7 +101,7 @@
                 </tr>
             </tbody>
         </table>
-        <button type="submit">Submit Vote</button>
+        <a href="{% url 'candidatelogin' %}"><button type="submit">Submit Vote</button></a>
     </div>
 </body>
 
