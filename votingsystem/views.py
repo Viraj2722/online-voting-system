@@ -19,5 +19,9 @@ def admin_login(request):
         return redirect('home')
     return render(request, 'adminlogin.html')
 
+def admin_page(request):
+    return render(request, 'adminpage.html')
+
 def candidate_list(request):
     return render(request, 'candidatelist.html')
+
