@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Candidate Login</title>
-</head>
-
-<body>
     <style>
         body {
-            background-color: #f2f2f2;
+            /* background-image: url('https://plus.unsplash.com/premium_photo-1708938893183-ef7b1362c33b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); */
+            background-size: cover;
+            background-position: center;
+            background-color: #fc7311;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
@@ -22,6 +22,16 @@
 
         h1 {
             text-align: center;
+            color: #000000;
+        }
+
+        .login-box {
+            background-color: rgba(207, 203, 203, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 50px auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         form {
@@ -34,6 +44,7 @@
         form label {
             margin: 10px 0;
             font-weight: bold;
+            color: #000000;
         }
 
         form input[type="text"] {
@@ -41,6 +52,7 @@
             margin: 10px 0;
             border-radius: 5px;
             border: 1px solid #ddd;
+            width: 60%;
         }
 
         button:hover {
@@ -68,17 +80,22 @@
             transition: background-color 0.3s;
         }
     </style>
-    <h1>Candidate Login</h1>
-    <form method="POST" action="{% url 'candidatelogin' %}">
-        {% csrf_token %}
-        <label for="voter_id">Voter ID:</label><br>
-        <input type="text" id="voter_id" name="voter_id" required><br><br>
+</head>
 
-        <label for="mobileno">Mobile Number:</label><br>
-        <input type="text" id="mobileno" name="mobileno" required><br><br>
+<body>
+    <div class="login-box">
+        <h1>Candidate Login</h1>
+        <form method="POST" action="{% url 'candidatelogin' %}">
+            {% csrf_token %}
+            <label for="voter_id">Voter ID:</label>
+            <input type="text" id="voter_id" name="voter_id" required>
 
-        <button id="submit" type="submit">Login</button>
-    </form>
+            <label for="mobileno">Mobile Number:</label>
+            <input type="text" id="mobileno" name="mobileno" required>
+
+            <button id="submit" type="submit">Login</button>
+        </form>
+    </div>
 </body>
 
 </html>
