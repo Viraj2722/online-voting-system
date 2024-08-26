@@ -68,14 +68,31 @@
             transition: background-color 0.3s;
         }
     </style>
+
     <h1>Candidate Login</h1>
     <form method="POST" action="{% url 'candidatelogin' %}">
         {% csrf_token %}
-        <label for="voter_id">Voter ID:</label><br>
-        <input type="text" id="voter_id" name="voter_id" required><br><br>
+        <label for="voter_id">Voter ID:</label>
+        <input type="text" id="voter_id" name="voter_id" required>
 
-        <label for="mobileno">Mobile Number:</label><br>
-        <input type="text" id="mobileno" name="mobileno" required><br><br>
+        <label for="mobileno">Mobile Number:</label>
+        <input type="text" id="mobileno" name="mobileno" required>
+        <button type="button" id="verify">Verify</button>
+        <!-- <div id="otp-field" style="display: none;">
+            <label for="otp">OTP:</label><br>
+            <input type="text" id="otp" name="otp" required><br><br> -->
+        </div>
+
+
+
+
+
+
+
+        {% if alert_message %}
+        <script>alert("{{ alert_message }}");</script>
+        {% endif %}
+
 
         <button id="submit" type="submit">Login</button>
     </form>

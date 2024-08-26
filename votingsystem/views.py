@@ -1,10 +1,11 @@
-
 from django.shortcuts import render, redirect
 import os ,psycopg2
 import easygui as e
+from django.http import HttpResponse
 from dotenv import load_dotenv
 load_dotenv()
-import supabase
+import supabase 
+
 
 
 
@@ -33,8 +34,12 @@ def candidate_login(request):
         if record:
             return redirect('candidatelist')
         else:
-            e.msgbox('Invalid Voter ID or Mobile Number', 'Error')
-            return render(request, 'candidatelogin.html')
+            return render(request, 'candidatelogin.html', {'alert_message': 'Invalid Voter ID or Mobile Number'})
+
+           
+            
+            # JavaScript code with a simulated alert function
+            # return render(request, 'candidatelogin.html')
             
 
     return render(request, 'candidatelogin.html')
