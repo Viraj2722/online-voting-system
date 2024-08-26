@@ -4,6 +4,8 @@ import os ,psycopg2
 import easygui as e
 from dotenv import load_dotenv
 load_dotenv()
+import supabase
+
 
 
 connection = psycopg2.connect(database=os.getenv("DATABASE_NAME"), 
@@ -12,7 +14,7 @@ connection = psycopg2.connect(database=os.getenv("DATABASE_NAME"),
                                   host=os.getenv("DATABASE_HOST"),
                                     port=os.getenv("DATABASE_PORT"))
 cursor = connection.cursor()
-cursor.execute("SELECT * FROM voter")
+cursor.execute("SELECT * FROM voter") # Missing closing quotation mark
 record = cursor.fetchall()
 # print(record)
 
@@ -24,7 +26,7 @@ def candidate_login(request):
         voter_id = request.POST['voter_id']
         mobileno = request.POST['mobileno']
 
-        cursor.execute("SELECT * FROM voter WHERE voterid=%s AND voter_number=%s", (voter_id, mobileno))
+        cursor.execute('SELECT * FROM voter WHERE "Voterid" = {voter_id}  AND "VoterNumber" ={mobileno}'.format(voter_id=voter_id, mobileno=mobileno))
         record = cursor.fetchone()
         
         # Check if the voter exists
@@ -43,7 +45,7 @@ def admin_login(request):
     if request.method == 'POST':
         adminid =  request.POST['admin_id']
         
-        cursor.execute("SELECT * FROM voteradmin WHERE adminid = '{adminid}' ".format(adminid=adminid))
+        cursor.execute('SELECT * FROM admin WHERE "Adminid" = \'{adminid}\' ' .format(adminid=adminid))
         record = cursor.fetchone()
 
         
