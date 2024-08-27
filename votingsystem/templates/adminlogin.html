@@ -75,6 +75,10 @@
 
         <button type="submit">Login</button>
 
+        {% if alert_admin_message %}
+        <script>alert("{{ alert_admin_message }}");</script>
+        {% endif %}
+
     </form>
 
 
