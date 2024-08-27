@@ -21,6 +21,16 @@ voter_records = cursor.fetchall()
 
 # List to store political leaders
 political_leaders = []
+cursor.execute('SELECT "CandidateName" , "CandidatePosition" FROM candidatedetails')
+politicaldata = cursor.fetchall()
+
+for i in politicaldata:
+    political_leaders.append({
+        'leader_name': i[0],
+        'position': i[1]
+    })
+
+print(political_leaders)
 
 def home(request):
     return render(request, 'home.html')
@@ -78,10 +88,15 @@ def admin_page(request):
             leader_name = request.POST['leader_name']
             position = request.POST['position']
 
+           
+
+
             political_leaders.append({
                 'leader_name': leader_name,
                 'position': position
             })
+
+            print(political_leaders)
 
             cursor.execute(
                 'INSERT INTO candidatedetails ("CandidateName", "CandidatePosition") VALUES (%s, %s)',

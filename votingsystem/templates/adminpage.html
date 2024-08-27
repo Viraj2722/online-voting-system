@@ -103,6 +103,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
             float: right;
+
         }
     </style>
 
@@ -119,12 +120,12 @@
             <label for="position">Position</label>
             <input type="text" name="position" id="position" required>
         </div>
-        <button type="submit" name="action" value="add">Add Political Leader</button>
+        <button type="submit" name="action" value="add">Add Candidate </button>
         <button type="submit" name="action" value="start">Start Live Voting</button>
     </form>
 
     <!-- List of Added Political Leaders -->
-    <h2>Added Political Leaders</h2>
+    <h2>Added Candidate List</h2>
     <ul>
         {% for leader in political_leaders %}
         <li>
