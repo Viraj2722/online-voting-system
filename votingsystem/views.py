@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 import os ,psycopg2
-import easygui as e
 from django.http import HttpResponse
 from dotenv import load_dotenv
 load_dotenv()
@@ -58,8 +57,8 @@ def admin_login(request):
         if record:
             return redirect('adminpage')
         else:
-            e.msgbox('Invalid Admin ID ', 'Error')
-            return render(request, 'adminlogin.html')
+            return render(request, 'adminlogin.html', {'alert_admin_message': 'Invalid Admin ID'})
+           
     
     return render(request, 'adminlogin.html')
 
