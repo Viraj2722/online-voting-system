@@ -16,10 +16,6 @@
             padding: 20px;
         }
 
-        a {
-            text-decoration: none;
-        }
-
         h1 {
             text-align: center;
         }
@@ -31,15 +27,23 @@
             margin-top: 20px;
         }
 
-        form label {
-            margin: 10px 0;
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            width: 45%;
             font-weight: bold;
         }
 
-        form input[type="text"],
-        form input[type="file"] {
+        .input-group input[type="text"],
+        .input-group input[type="file"] {
+            width: 50%;
             padding: 10px;
-            margin: 10px 0;
             border-radius: 5px;
             border: 1px solid #ddd;
         }
@@ -65,25 +69,75 @@
             transform: translateY(2px);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        #delete {
+
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            float: right;
+        }
     </style>
+
     <h1>Admin Page</h1>
-    <form method="POST" action="{% url 'adminpage' %}">
+
+    <!-- Form to Add Political Leader -->
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <table>
-            <tr>
-                <th>Political Leader</th>
-                <th>Symbol</th>
-            </tr>
-            <tr>
-                <td><input type="text" name="leader_name" required></td>
-                <td><input type="file" name="symbol" required></td>
-            </tr>
-        </table>
-        <br>
-        <button type="submit">Add Political Leader</button>
-        <button>Live Voting</button>
+        <div class="input-group">
+            <label for="leader_name">Political Leader</label>
+            <input type="text" name="leader_name" id="leader_name" required>
+        </div>
+        <div class="input-group">
+            <label for="position">Position</label>
+            <input type="text" name="position" id="position" required>
+        </div>
+        <button type="submit" name="action" value="add">Add Political Leader</button>
+        <button type="submit" name="action" value="start">Start Live Voting</button>
     </form>
-    <br>
+
+    <!-- List of Added Political Leaders -->
+    <h2>Added Political Leaders</h2>
+    <ul>
+        {% for leader in political_leaders %}
+        <li>
+            {{ leader.leader_name }} - {{ leader.position }}
+            <form method="POST" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="leader_name" value="{{ leader.leader_name }}">
+                <button type="submit" name="action" value="delete" id="delete">Delete</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
 </body>
 
 </html>

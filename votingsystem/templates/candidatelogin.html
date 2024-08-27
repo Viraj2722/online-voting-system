@@ -5,15 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Candidate Login</title>
-</head>
-
-<body>
     <style>
         body {
-            /* background-image: url('https://plus.unsplash.com/premium_photo-1708938893183-ef7b1362c33b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); */
+            background-image: url('https://img.freepik.com/free-vector/dark-gradient-background-with-copy-space_53876-99548.jpg?size=626&ext=jpg');
             background-size: cover;
             background-position: center;
-            background-color: #fc7311;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
@@ -29,13 +25,12 @@
         }
 
         .login-box {
-            background-color: rgba(207, 203, 203, 0.8);
+            background-color: rgba(212, 205, 205, 0.8);
             padding: 20px;
             border-radius: 10px;
             max-width: 400px;
             margin: 50px auto;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-
         }
 
         form {
@@ -84,35 +79,29 @@
             transition: background-color 0.3s;
         }
     </style>
+</head>
 
-    <h1>Candidate Login</h1>
-    <form method="POST" action="{% url 'candidatelogin' %}">
-        {% csrf_token %}
-        <label for="voter_id">Voter ID:</label>
-        <input type="text" id="voter_id" name="voter_id" required>
+<body>
+    <div class="login-box">
+        <h1>Candidate Login</h1>
+        <form method="POST" action="{% url 'candidatelogin' %}">
+            {% csrf_token %}
+            <label for="voter_id">Voter ID:</label>
+            <input type="text" id="voter_id" name="voter_id" required>
 
-        <label for="mobileno">Mobile Number:</label>
-        <input type="text" id="mobileno" name="mobileno" required>
-        <button type="button" id="verify">Verify</button>
-        <!-- <div id="otp-field" style="display: none;">
-            <label for="otp">OTP:</label><br>
-            <input type="text" id="otp" name="otp" required><br><br>
-        </div> -->
-        <button id="submit" type="submit">Login</button>
+            <label for="mobileno">Mobile Number:</label>
+            <input type="text" id="mobileno" name="mobileno" required>
 
+            <button id="verify" type="verify">Verify</button>
+            <button id="submit" type="submit">Login</button>
 
-
-
-
-
-
-        {% if alert_message %}
-        <script>alert("{{ alert_message }}");</script>
-        {% endif %}
+            {% if alert_message %}
+            <script>alert("{{ alert_message }}");</script>
+            {% endif %}
 
 
-
-    </form>
+        </form>
+    </div>
 </body>
 
 </html>
