@@ -79,29 +79,25 @@
 <body>
     <div class="container">
         <h1>Vote for Your Candidate</h1>
-        <table>
-            <thead>
+        <form method="POST" action="{% url 'cast_vote' %}">
+            {% csrf_token %}
+            <table>
                 <tr>
-                    <th>Political Party / Leader</th>
-                    <th>Symbol</th>
+                    <th>Candidate Name</th>
+                    <th>Candidate Position</th>
+                    <th>Click to Vote</th>
                 </tr>
-            </thead>
-            <tbody>
+                {% for candidate in political_leaders %}
                 <tr>
-                    <td>Party A</td>
-                    <td><img src="symbol_a.png" alt="Party A Symbol" width="50"></td>
+                    <td>{{ candidate.leader_name }}</td>
+                    <td>{{ candidate.position }}</td>
+                    <td>
+                        <button type="submit" name="vote" id="vote" value="{{ candidate.leader_name }}">Vote</button>
+                    </td>
                 </tr>
-                <tr>
-                    <td>Party B</td>
-                    <td><img src="symbol_b.png" alt="Party B Symbol" width="50"></td>
-                </tr>
-                <tr>
-                    <td>Party C</td>
-                    <td><img src="symbol_c.png" alt="Party C Symbol" width="50"></td>
-                </tr>
-            </tbody>
-        </table>
-        <a href="{% url 'candidatelogin' %}"><button type="submit">Submit Vote</button></a>
+                {% endfor %}
+            </table>
+        </form>
     </div>
 </body>
 
