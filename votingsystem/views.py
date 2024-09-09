@@ -81,6 +81,9 @@ def admin_login(request):
     
     return render(request, 'adminlogin.html')
 
+#Logic for aboutuspage
+def about_page(request):
+    return render(request, 'aboutpage.html')
 
 # Logic for admin page
 def admin_page(request):
