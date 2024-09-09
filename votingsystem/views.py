@@ -161,7 +161,7 @@ def cast_vote(request):
                 [voter_id]
             )
             connection.commit()
-
+            render(request, 'candidatelist.html',"alert_message:Vote casted successfully")
             return redirect('home')
         else:
             return HttpResponse("You have already voted.", status=403)
