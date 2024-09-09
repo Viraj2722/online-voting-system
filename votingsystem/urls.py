@@ -1,4 +1,3 @@
-# urls.py
 from django.urls import path
 from . import views
 
@@ -8,5 +7,6 @@ urlpatterns = [
     path('candidatelist/', views.candidate_list, name='candidatelist'),
     path('adminpage/', views.admin_page, name='adminpage'),
     path('cast_vote/', views.cast_vote, name='cast_vote'),
-    path('adminlogin/', views.admin_login, name='adminlogin')
+    path('adminlogin/', views.admin_login, name='adminlogin'),
+    path('aboutpage/', views.about_page, name='aboutpage')
 ]

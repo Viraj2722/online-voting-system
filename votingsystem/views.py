@@ -89,6 +89,9 @@ def admin_login(request):
     
     return render(request, 'adminlogin.html')
 
+#Logic for aboutuspage
+def about_page(request):
+    return render(request, 'aboutpage.html')
 
 # Logic for admin page
 def admin_page(request):
@@ -168,8 +171,7 @@ def cast_vote(request):
             )
             connection.commit()
 
-            # After successful vote, redirect to login
-            return redirect('candidatelogin')
+            return redirect('home')
         else:
             return render(request, 'candidatelogin.html')
 
