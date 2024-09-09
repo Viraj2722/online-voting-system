@@ -54,8 +54,8 @@ def candidate_login(request):
         
         if record:
             # Check if voter has already voted
-            if record[2]:  # record[2] is "IsVoted" field (True/False)
-                # Instead of rendering a template, use JavaScript to show alert and redirect
+            if record[2]:  
+                
                 return render(request, 'candidatelogin.html', {
                     'alert_message': 'You have already voted. '
                 })
@@ -176,7 +176,7 @@ def cast_vote(request):
             return render(request, 'candidatelogin.html')
 
     return HttpResponse("Invalid request method", status=405)
-    return HttpResponse("Invalid request method", status=405)
+    
 
 
 # Logic for logging out
