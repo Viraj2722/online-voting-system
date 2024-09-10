@@ -125,6 +125,31 @@
       color: #ff0000;
       /* Icon color on hover */
     }
+
+    .info_admin{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .Cand_list{
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      max-width:fit-content+16px;
+    }
+
+    .socket{
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+    }
+
+    .terminal
+    {
+      width: 10rem;
+      height: 10rem;
+      background: black;
+    }
   </style>
   <form method="POST" action="{% url 'home' %}">
     {% csrf_token %}
@@ -153,8 +178,9 @@
     </button>
   </form>
 
+  <div class="info_admin">
   <!-- List of Added Political Leaders -->
-  <h2>Added Candidate List</h2>
+  <div class="Cand_list"><h2>Candidate List</h2>
   <ul>
     {% for leader in political_leaders %}
     <li>
@@ -168,7 +194,17 @@
       </form>
     </li>
     {% endfor %}
-  </ul>
+  </ul></div>
+
+  <div class="socket">
+    <h2>Socket Connection</h2>
+    <div class="terminal">
+
+    </div>
+
+  </div>
+</div>
+  </body>
 </body>
 
 </html>
