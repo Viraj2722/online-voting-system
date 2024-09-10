@@ -73,36 +73,37 @@
         background-color: #0056b3;
       }
     </style>
-  </head>
+    <script>
+        function confirmVote(candidateName) {
+            const confirmation = confirm(`Are you sure you want to vote for ${candidateName}?`);
+            return confirmation; // Submit the form if confirmed
+        }
+    </script>
+</head>
 
   <body>
     <div class="container">
-      <h1>Vote for Your Candidate</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Political Party / Leader</th>
-            <th>Position</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>//CandidateName1</td>
-            <td>//Position</td>
-          </tr>
-          <tr>
-            <td>//CandidateName2</td>
-            <td>//Position</td>
-          </tr>
-          <tr>
-            <td>//CandidateName3</td>
-            <td>//Position</td>
-          </tr>
-        </tbody>
-      </table>
-      <a href="{% url 'candidatelogin' %}"
-        ><button type="submit">Submit Vote</button></a
-      >
+        <h1>Vote for Your Candidate</h1>
+        <form method="POST" action="{% url 'cast_vote' %}">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <th>Candidate Name</th>
+                    <th>Candidate Position</th>
+                    <th>Click to Vote</th>
+                </tr>
+                {% for candidate in political_leaders %}
+                <tr>
+                    <td>{{ candidate.leader_name }}</td>
+                    <td>{{ candidate.position }}</td>
+                    <td>
+                        <button type="submit" name="vote" id="vote" value="{{ candidate.leader_name }}"
+                            onclick="return confirmVote('{{ candidate.leader_name }}')">Vote</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
     </div>
   </body>
 </html>
