@@ -39,11 +39,13 @@ def home(request):
 
 
 # Logic for candidate login
+# Logic for candidate login
 def candidate_login(request):
     if request.method == 'POST':
         voter_id = request.POST['voter_id']
         mobileno = request.POST['mobileno']
 
+        # Check if voter exists
         cursor.execute(
             'SELECT * FROM voter WHERE "Voterid" = %s AND "VoterNumber" = %s',
             [voter_id, mobileno]
@@ -52,15 +54,21 @@ def candidate_login(request):
         
         if record:
             # Check if voter has already voted
-            if record[2]: 
-                return HttpResponse("You have already voted.", status=403)
+            if record[2]:  
+                
+                return render(request, 'candidatelogin.html', {
+                    'alert_message': 'You have already voted. '
+                })
             else:
                 request.session['voter_id'] = voter_id  # Save voter ID in session
-                return redirect('candidatelist')
+                return redirect('candidatelist')  # Redirect to candidate list if not voted
         else:
-            return render(request, 'candidatelogin.html', {'alert_message': 'Invalid Voter ID or Mobile Number'})
+            return render(request, 'candidatelogin.html', {
+                'alert_message': 'Invalid Voter ID or Mobile Number'
+            })
 
     return render(request, 'candidatelogin.html')
+
 
 
 # Logic for admin login
@@ -81,6 +89,9 @@ def admin_login(request):
     
     return render(request, 'adminlogin.html')
 
+#Logic for aboutuspage
+def about_page(request):
+    return render(request, 'aboutpage.html')
 
 # Logic for admin page
 def admin_page(request):
@@ -147,11 +158,9 @@ def cast_vote(request):
             leader_name = request.POST.get('vote')
 
             # Increment the vote count for the selected candidate
-            print(leader_name)
             cursor.execute(
                 'UPDATE candidatedetails SET "VotingCount" = "VotingCount" + 1 WHERE "CandidateName" = %s', 
                 [leader_name]
-              
             )
             connection.commit()
 
@@ -164,9 +173,10 @@ def cast_vote(request):
 
             return redirect('home')
         else:
-            return HttpResponse("You have already voted.", status=403)
+            return render(request, 'candidatelogin.html')
 
     return HttpResponse("Invalid request method", status=405)
+    
 
 
 # Logic for logging out

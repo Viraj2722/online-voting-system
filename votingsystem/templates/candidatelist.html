@@ -73,7 +73,13 @@
         background-color: #0056b3;
       }
     </style>
-  </head>
+    <script>
+        function confirmVote(candidateName) {
+            const confirmation = confirm(`Are you sure you want to vote for ${candidateName}?`);
+            return confirmation; // Submit the form if confirmed
+        }
+    </script>
+</head>
 
   <body>
     <div class="container">
@@ -91,7 +97,8 @@
                     <td>{{ candidate.leader_name }}</td>
                     <td>{{ candidate.position }}</td>
                     <td>
-                        <button type="submit" name="vote" id="vote" value="{{ candidate.leader_name }}">Vote</button>
+                        <button type="submit" name="vote" id="vote" value="{{ candidate.leader_name }}"
+                            onclick="return confirmVote('{{ candidate.leader_name }}')">Vote</button>
                     </td>
                 </tr>
                 {% endfor %}
