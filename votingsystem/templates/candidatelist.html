@@ -1,82 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Candidate Voting</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-        .container {
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 100%;
-            max-width: 600px;
-        }
+      .container {
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 100%;
+        max-width: 600px;
+      }
 
-        a {
-            text-decoration: none;
-        }
+      a {
+        text-decoration: none;
+      }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+      }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+      }
 
-        th,
-        td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+      }
 
-        th {
-            background-color: #007bff;
-            color: #ffffff;
-        }
+      th {
+        background-color: #007bff;
+        color: #ffffff;
+      }
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
 
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #ffffff;
-            font-size: 16px;
-            cursor: pointer;
-        }
+      button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #ffffff;
+        font-size: 16px;
+        cursor: pointer;
+      }
 
-        button:hover {
-            background-color: #0056b3;
-        }
+      button:hover {
+        background-color: #0056b3;
+      }
     </style>
+    <script>
+        function confirmVote(candidateName) {
+            const confirmation = confirm(`Are you sure you want to vote for ${candidateName}?`);
+            return confirmation; // Submit the form if confirmed
+        }
+    </script>
 </head>
 
-<body>
+  <body>
     <div class="container">
         <h1>Vote for Your Candidate</h1>
         <form method="POST" action="{% url 'cast_vote' %}">
@@ -92,13 +97,13 @@
                     <td>{{ candidate.leader_name }}</td>
                     <td>{{ candidate.position }}</td>
                     <td>
-                        <button type="submit" name="vote" id="vote" value="{{ candidate.leader_name }}">Vote</button>
+                        <button type="submit" name="vote" id="vote" value="{{ candidate.leader_name }}"
+                            onclick="return confirmVote('{{ candidate.leader_name }}')">Vote</button>
                     </td>
                 </tr>
                 {% endfor %}
             </table>
         </form>
     </div>
-</body>
-
+  </body>
 </html>
