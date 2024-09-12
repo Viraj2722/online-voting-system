@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 import os
 import psycopg2
 from dotenv import load_dotenv
+import socket
 from django.http import HttpResponse
 
+# Load environment variables
 load_dotenv()
 
 # Establish database connection
@@ -16,13 +18,16 @@ connection = psycopg2.connect(
 )
 cursor = connection.cursor()
 
+# Dictionary to store socket connections
+socket_connections = {}
+
 # Fetch records for use in login functions
 cursor.execute("SELECT * FROM voter")
 voter_records = cursor.fetchall()
 
 # List to store political leaders
 political_leaders = []
-cursor.execute('SELECT "CandidateName" , "CandidatePosition", "VotingCount" FROM candidatedetails')
+cursor.execute('SELECT "CandidateName", "CandidatePosition", "VotingCount" FROM candidatedetails')
 politicaldata = cursor.fetchall()
 
 for i in politicaldata:
@@ -38,8 +43,7 @@ def home(request):
     return render(request, 'home.html')
 
 
-# Logic for candidate login
-# Logic for candidate login
+# Logic for candidate login with socket connection
 def candidate_login(request):
     if request.method == 'POST':
         voter_id = request.POST['voter_id']
@@ -55,12 +59,19 @@ def candidate_login(request):
         if record:
             # Check if voter has already voted
             if record[2]:  
-                
                 return render(request, 'candidatelogin.html', {
-                    'alert_message': 'You have already voted. '
+                    'alert_message': 'You have already voted.'
                 })
             else:
                 request.session['voter_id'] = voter_id  # Save voter ID in session
+                request.session['mobileno'] = mobileno  # Save mobile number in session
+                # Create socket connection if it doesn't exist for this session
+                if voter_id not in socket_connections:
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    server_address = ('127.0.0.1', 4001)  # Voting server's IP and port
+                    sock.connect(server_address)
+                    socket_connections[voter_id] = sock  # Store socket in the global dict
+
                 return redirect('candidatelist')  # Redirect to candidate list if not voted
         else:
             return render(request, 'candidatelogin.html', {
@@ -68,7 +79,6 @@ def candidate_login(request):
             })
 
     return render(request, 'candidatelogin.html')
-
 
 
 # Logic for admin login
@@ -89,9 +99,11 @@ def admin_login(request):
     
     return render(request, 'adminlogin.html')
 
-#Logic for aboutuspage
+
+# Logic for about us page
 def about_page(request):
     return render(request, 'aboutpage.html')
+
 
 # Logic for admin page
 def admin_page(request):
@@ -122,7 +134,6 @@ def admin_page(request):
 
             political_leaders = [leader for leader in political_leaders if leader['leader_name'] != leader_name]
 
-        # Redirect to the admin page to allow for new entries
         return redirect('adminpage')
 
     return render(request, 'adminpage.html', {'political_leaders': political_leaders})
@@ -143,11 +154,11 @@ def candidate_list(request):
     return render(request, 'candidatelist.html', {'political_leaders': political_leaders})
 
 
-# Logic to cast a vote for a candidate
+# Logic to cast a vote using the socket connection
 def cast_vote(request):
     if request.method == 'POST':
-        voter_id = request.session.get('voter_id')  # Get voter ID from session
-
+        voter_id  = request.session.get('voter_id')  # Get voter ID from session
+        mobilenumber = request.session.get('mobileno')  # Get mobile number from session
         # Check if voter has already voted
         cursor.execute(
             'SELECT "IsVoted" FROM voter WHERE "Voterid" = %s', [voter_id]
@@ -157,32 +168,68 @@ def cast_vote(request):
         if not is_voted:
             leader_name = request.POST.get('vote')
 
-            # Increment the vote count for the selected candidate
-            cursor.execute(
-                'UPDATE candidatedetails SET "VotingCount" = "VotingCount" + 1 WHERE "CandidateName" = %s', 
-                [leader_name]
-            )
-            connection.commit()
+            if voter_id in socket_connections:
+                sock = socket_connections[voter_id]  # Get the existing socket connection
 
-            # Mark the voter as having voted
-            cursor.execute(
-                'UPDATE voter SET "IsVoted" = TRUE WHERE "Voterid" = %s',
-                [voter_id]
-            )
-            connection.commit()
+                try:
+                    # Send the vote (candidate name) to the server
+                    sock.sendall(f"{voter_id} {mobilenumber}".encode())  # Inform the server the voter is ready to vote
+                    sock.sendall(leader_name.encode())  # Send the vote (candidate name)
 
-            return redirect('home')
+                    # Wait for the server's response
+                    response = sock.recv(1024).decode()  # Receive the response from the server
+                    print(f" Server response: {response}")
+
+                    response = sock.recv(1024).decode()
+                    print(f"Voting  response: {response}")
+
+                    
+
+                    if response == "Successful":
+                        # Voting successful, show success message
+                        cursor.execute(
+                            'UPDATE candidatedetails SET "VotingCount" = "VotingCount" + 1 WHERE "CandidateName" = %s', [leader_name]
+                        )
+                        connection.commit()
+                        
+                        cursor.execute(
+                            'UPDATE voter SET "IsVoted" = TRUE WHERE "Voterid" = %s', [voter_id]
+                        )
+                        connection.commit()
+                        
+
+                        return redirect('home')
+                    else:
+                        # Voting failed, show error message
+                        return render(request, 'candidatelogin.html', {
+                            'alert_message': 'Voting failed. Please try again later.'
+                        })
+                except Exception as e:
+                    # Handle socket communication errors
+                    return render(request, 'candidatelogin.html', {
+                        'alert_message': f'Server error: {str(e)}. Please try again later.'
+                    })
+
+                finally:
+                    # Close socket and clean up after vote is cast
+                    sock.close()
+                    del socket_connections[voter_id]  # Remove the socket reference from global dict
+
         else:
-            return render(request, 'candidatelogin.html')
+            return render(request, 'candidatelogin.html', {
+                'alert_message': 'You have already voted.'
+            })
 
     return HttpResponse("Invalid request method", status=405)
-    
 
 
 # Logic for logging out
 def logout(request):
     if request.method == 'POST':
         if request.POST.get('logout'):
+            if 'sock' in request.session:
+                request.session['sock'].close()  # Close the socket on logout
+                del request.session['sock']  # Clear session
             return redirect('home')
 
     return render(request, 'logout.html')
