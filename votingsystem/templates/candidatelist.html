@@ -7,7 +7,11 @@
     <style>
       body {
         font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
+        background: linear-gradient(
+          0deg,
+          rgba(34, 193, 195, 1) 0%,
+          rgba(253, 187, 45, 1) 100%
+        );
         margin: 0;
         padding: 0;
         display: flex;
@@ -21,6 +25,7 @@
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         padding: 20px;
+        border: none;
         width: 100%;
         max-width: 600px;
       }
@@ -74,36 +79,45 @@
       }
     </style>
     <script>
-        function confirmVote(candidateName) {
-            const confirmation = confirm(`Are you sure you want to vote for ${candidateName}?`);
-            return confirmation; // Submit the form if confirmed
-        }
+      function confirmVote(candidateName) {
+        const confirmation = confirm(
+          `Are you sure you want to vote for ${candidateName}?`
+        );
+        return confirmation; // Submit the form if confirmed
+      }
     </script>
-</head>
+  </head>
 
   <body>
     <div class="container">
-        <h1>Vote for Your Candidate</h1>
-        <form method="POST" action="{% url 'cast_vote' %}">
-            {% csrf_token %}
-            <table>
-                <tr>
-                    <th>Candidate Name</th>
-                    <th>Candidate Position</th>
-                    <th>Click to Vote</th>
-                </tr>
-                {% for candidate in political_leaders %}
-                <tr>
-                    <td>{{ candidate.leader_name }}</td>
-                    <td>{{ candidate.position }}</td>
-                    <td>
-                        <button type="submit" name="vote" id="vote" value="{{ candidate.leader_name }}"
-                            onclick="return confirmVote('{{ candidate.leader_name }}')">Vote</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-        </form>
+      <h1>Vote for Your Candidate</h1>
+      <form method="POST" action="{% url 'cast_vote' %}">
+        {% csrf_token %}
+        <table>
+          <tr>
+            <th>Candidate Name</th>
+            <th>Candidate Position</th>
+            <th>Click to Vote</th>
+          </tr>
+          {% for candidate in political_leaders %}
+          <tr>
+            <td>{{ candidate.leader_name }}</td>
+            <td>{{ candidate.position }}</td>
+            <td>
+              <button
+                type="submit"
+                name="vote"
+                id="vote"
+                value="{{ candidate.leader_name }}"
+                onclick="return confirmVote('{{ candidate.leader_name }}')"
+              >
+                Vote
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </form>
     </div>
   </body>
 </html>
