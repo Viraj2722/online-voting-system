@@ -1,126 +1,179 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About Us</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: rgb(34, 193, 195);
+        background: linear-gradient(
+          0deg,
+          rgba(34, 193, 195, 1) 0%,
+          rgba(253, 187, 45, 1) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      h1 {
+        font-family: Arial;
+        font-size: 2.5em;
+        text-align: center;
+        color: #2c1291;
+        margin-bottom: 20px;
+      }
+
+      .about-us-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        width: 100%;
+        padding: 20px;
+      }
+
+      .card {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        width: 300px;
+        /* Fixed card width */
+        margin: 20px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card img {
+        border-radius: 15px 15px 0 0;
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+      }
+
+      .card h3 {
+        font-size: 1.5em;
+        margin: 15px 0 10px;
+        color: #333;
+      }
+
+      .card p {
+        font-size: 1em;
+        color: #555;
+        padding: 0 20px 20px;
+      }
+
+      .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+      }
+
+      @media (max-width: 768px) {
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: rgb(34, 193, 195);
-            background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+          display: flex;
+          background-color: transparent;
         }
 
         h1 {
-            font-style: italic;
-
-            font-size: 2.5em;
-            text-align: center;
-            color: #2c1291;
-            margin-bottom: 20px;
+          font-size: 3rem;
+          top: 100px;
+          position:fixed;
         }
-
-        .about-us-container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            width: 100%;
-            padding: 20px;
-        }
-
         .card {
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            /* Fixed card width */
-            margin: 20px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+          max-width: 70%;
+          margin-left: 40px;
+          margin-bottom: 10px;
+          height: 90%;
         }
 
         .card img {
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #007bff, #00c6ff);
+          height: 100px;
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          font-size: x-small;
+          display: flex;
+          background-color: transparent;
         }
 
-        .card h3 {
-            font-size: 1.5em;
-            margin: 15px 0 10px;
-            color: #333;
+        h1 {
+          font-size: 3rem;
         }
 
-        .card p {
-            font-size: 1em;
-            color: #555;
-            padding: 0 20px 20px;
+        .about-us-container {
+          display: grid;
+          height: auto;
+          align-items: center;
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .card {
+          max-width: 70%;
+          margin-left: 40px;
+          margin-bottom: 10px;
+          height: 90%;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        .card img {
+          height: 100px;
+          width: 100%;
         }
-
-        @media (max-width: 768px) {
-            .card {
-                width: 250px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .card {
-                flex: 1 1 100%;
-            }
-        }
+      }
     </style>
 
-    <h1>Team Members</h1>
+    <h1>Team</h1>
 
     <div class="about-us-container">
-        <div class="card">
-            <img src="https://via.placeholder.com/300x250/007bff/ffffff?text=Vijet+Naik" alt="Vijet Naik">
-            <h3>Vijet Naik</h3>
-            <p>Developer</p>
-        </div>
+      <div class="card">
+        <img
+          src="https://via.placeholder.com/300x250/007bff/ffffff?text=Vijet+Naik"
+          alt="Vijet Naik"
+        />
+        <h3>Vijet Naik</h3>
+        <p>Developer</p>
+      </div>
 
-        <div class="card">
-            <img src="https://via.placeholder.com/300x250/ff5733/ffffff?text=Nash+Nazareth" alt="Nash Nazareth">
-            <h3>Nash Nazareth</h3>
-            <p>Developer</p>
-        </div>
+      <div class="card">
+        <img
+          src="https://via.placeholder.com/300x250/ff5733/ffffff?text=Nash+Nazareth"
+          alt="Nash Nazareth"
+        />
+        <h3>Nash Nazareth</h3>
+        <p>Developer</p>
+      </div>
 
-        <div class="card">
-            <img src="https://via.placeholder.com/300x250/28a745/ffffff?text=Bhavik+Solanki" alt="Bhavik Solanki">
-            <h3>Bhavik Solanki</h3>
-            <p>Developer</p>
-        </div>
+      <div class="card">
+        <img
+          src="https://via.placeholder.com/300x250/28a745/ffffff?text=Bhavik+Solanki"
+          alt="Bhavik Solanki"
+        />
+        <h3>Bhavik Solanki</h3>
+        <p>Developer</p>
+      </div>
 
-        <div class="card">
-            <!-- <img src="{% static 'images/viraj.jpg' %}" alt="Viraj Walavalkar"> -->
-            <img src="https://via.placeholder.com/300x250/10b656/ffffff?text=Viraj+Walavalkar" alt="Viraj Walavalkar">
-            <h3>Viraj Walavalkar</h3>
-            <p>Developer</p>
-        </div>
+      <div class="card">
+        <!-- <img src="{% static 'images/viraj.jpg' %}" alt="Viraj Walavalkar"> -->
+        <img
+          src="https://via.placeholder.com/300x250/10b656/ffffff?text=Viraj+Walavalkar"
+          alt="Viraj Walavalkar"
+        />
+        <h3>Viraj Walavalkar</h3>
+        <p>Developer</p>
+      </div>
     </div>
-
-</body>
-
+  </body>
 </html>
