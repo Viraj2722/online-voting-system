@@ -185,8 +185,8 @@
         font-size: 1.5rem;
       }
 
-      button{
-        max-width:fit-content;
+      button {
+        max-width: fit-content;
       }
 
       .input-group {
@@ -329,6 +329,10 @@
           {% endfor %}
         </tbody>
       </table>
+      <form method="POST">
+        {% csrf_token %}
+        <button type="submit" name="action" value="refresh" id="refresh">Refresh</button>
+      </form>
     </div>
   </div>
 </body>

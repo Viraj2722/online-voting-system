@@ -133,8 +133,13 @@ def admin_page(request):
             delete_leader(leader_name)
 
             political_leaders = [leader for leader in political_leaders if leader['leader_name'] != leader_name]
-
+         
+        elif action == 'refresh':
+            return redirect('adminpage')
+    
         return redirect('adminpage')
+    
+      
 
     return render(request, 'adminpage.html', {'political_leaders': political_leaders})
 
@@ -191,6 +196,9 @@ def cast_vote(request):
                             'UPDATE candidatedetails SET "VotingCount" = "VotingCount" + 1 WHERE "CandidateName" = %s', [leader_name]
                         )
                         connection.commit()
+                        for leader in political_leaders:
+                          if leader['leader_name'] == leader_name:
+                             leader['Votingcount'] += 1 
                         
                         cursor.execute(
                             'UPDATE voter SET "IsVoted" = TRUE WHERE "Voterid" = %s', [voter_id]
