@@ -2,10 +2,18 @@ import socket
 import os
 import threading
 import psycopg2
+import math , random
 from threading import Thread
 from dotenv import load_dotenv
 
 load_dotenv()
+
+#generate random otp
+
+def generate_otp():
+    """Generate a random OTP."""
+    return random.randint(100000, 999999)
+
 
 # Database connection details
 DB_PARAMS = {
