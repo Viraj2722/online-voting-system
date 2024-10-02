@@ -285,55 +285,50 @@
     </button>
   </form>
 
-  <div class="info_admin">
-    <div class="socket">
-      <h2>Socket Connection</h2>
-      <div class="terminal"></div>
-    </div>
 
-    <!-- List of Added Political Leaders -->
-    <div class="Cand_list">
-      <h2>Candidate List</h2>
-      <ul>
+  <!-- List of Added Political Leaders -->
+  <div class="Cand_list">
+    <h2>Candidate List</h2>
+    <ul>
+      {% for leader in political_leaders %}
+      <li>
+        {{ leader.leader_name }} - {{ leader.position }}
+        <form method="POST" style="display: inline">
+          {% csrf_token %}
+          <input type="hidden" name="leader_name" value="{{ leader.leader_name }}" />
+          <button type="submit" name="action" value="delete" id="delete">
+            Delete
+          </button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="votecount">
+    <h2>Voting Count</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Candidate</th>
+          <th>Vote Count</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for leader in political_leaders %}
-        <li>
-          {{ leader.leader_name }} - {{ leader.position }}
-          <form method="POST" style="display: inline">
-            {% csrf_token %}
-            <input type="hidden" name="leader_name" value="{{ leader.leader_name }}" />
-            <button type="submit" name="action" value="delete" id="delete">
-              Delete
-            </button>
-          </form>
-        </li>
+        <tr>
+          <td>{{ leader.leader_name }} - {{ leader.position }}</td>
+          <td>{{ leader.Votingcount }}</td>
+          <!-- Assuming `vote_count` is available -->
+        </tr>
         {% endfor %}
-      </ul>
-    </div>
-
-    <div class="votecount">
-      <h2>Voting Count</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Candidate</th>
-            <th>Vote Count</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for leader in political_leaders %}
-          <tr>
-            <td>{{ leader.leader_name }} - {{ leader.position }}</td>
-            <td>{{ leader.Votingcount }}</td>
-            <!-- Assuming `vote_count` is available -->
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <form method="POST">
-        {% csrf_token %}
-        <button type="submit" name="action" value="refresh" id="refresh">Refresh</button>
-      </form>
-    </div>
+      </tbody>
+    </table>
+    <form method="POST">
+      {% csrf_token %}
+      <button type="submit" name="action" value="refresh" id="refresh">Refresh</button>
+    </form>
+  </div>
   </div>
 </body>
 

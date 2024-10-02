@@ -37,7 +37,6 @@ for i in politicaldata:
         'Votingcount': i[2]
     })
 
-print(political_leaders)
 
 def home(request):
     return render(request, 'home.html')
@@ -63,16 +62,17 @@ def candidate_login(request):
                     'alert_message': 'You have already voted.'
                 })
             else:
-                request.session['voter_id'] = voter_id  # Save voter ID in session
-                request.session['mobileno'] = mobileno  # Save mobile number in session
+                request.session['voter_id'] = voter_id 
+                request.session['mobileno'] = mobileno  
                 # Create socket connection if it doesn't exist for this session
+                
                 if voter_id not in socket_connections:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    server_address = ('127.0.0.1', 4001)  # Voting server's IP and port
+                    server_address = ('127.0.0.1', 4001) 
                     sock.connect(server_address)
-                    socket_connections[voter_id] = sock  # Store socket in the global dict
+                    socket_connections[voter_id] = sock  
 
-                return redirect('candidatelist')  # Redirect to candidate list if not voted
+                return redirect('candidatelist')  
         else:
             return render(request, 'candidatelogin.html', {
                 'alert_message': 'Invalid Voter ID or Mobile Number'
@@ -119,7 +119,7 @@ def admin_page(request):
             political_leaders.append({
                 'leader_name': leader_name,
                 'position': position,
-                'Votingcount': 0  # Initialize vote count to 0 for new candidate
+                'Votingcount': 0  
             })
 
             cursor.execute(
@@ -162,9 +162,9 @@ def candidate_list(request):
 # Logic to cast a vote using the socket connection
 def cast_vote(request):
     if request.method == 'POST':
-        voter_id  = request.session.get('voter_id')  # Get voter ID from session
-        mobilenumber = request.session.get('mobileno')  # Get mobile number from session
-        # Check if voter has already voted
+        voter_id  = request.session.get('voter_id') 
+        mobilenumber = request.session.get('mobileno')  
+       
         cursor.execute(
             'SELECT "IsVoted" FROM voter WHERE "Voterid" = %s', [voter_id]
         )
@@ -174,12 +174,12 @@ def cast_vote(request):
             leader_name = request.POST.get('vote')
 
             if voter_id in socket_connections:
-                sock = socket_connections[voter_id]  # Get the existing socket connection
+                sock = socket_connections[voter_id]  
 
                 try:
-                    # Send the vote (candidate name) to the server
-                    sock.sendall(f"{voter_id} {mobilenumber}".encode())  # Inform the server the voter is ready to vote
-                    sock.sendall(leader_name.encode())  # Send the vote (candidate name)
+                    
+                    sock.sendall(f"{voter_id} {mobilenumber}".encode())  
+                    sock.sendall(leader_name.encode())  
 
                     # Wait for the server's response
                     response = sock.recv(1024).decode()  # Receive the response from the server
@@ -221,7 +221,7 @@ def cast_vote(request):
                 finally:
                     # Close socket and clean up after vote is cast
                     sock.close()
-                    del socket_connections[voter_id]  # Remove the socket reference from global dict
+                    del socket_connections[voter_id] 
 
         else:
             return render(request, 'candidatelogin.html', {
