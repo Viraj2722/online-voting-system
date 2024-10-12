@@ -130,7 +130,7 @@ def candidate_login(request):
                 })
             else:
                 return render(request, 'candidatelogin.html', {
-                    'alert_message': 'You cannot send OTP, as you have already voted.',
+                    'alert_message': 'Invalid Voter ID or Mobile Number.',
                     'show_otp': False,
                     'voter_id': voter_id,
                     'mobileno': mobileno
