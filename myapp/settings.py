@@ -23,6 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+
+# settings.py
+
+TWILIO_ACCOUNT_SID = 'AC3ec8fa0cd7d5404ad216fd05ed3748dc'
+TWILIO_AUTH_TOKEN = '4b951004adc271db2d0489d2a530ba76'
+TWILIO_PHONE_NUMBER = '8591091865'
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
