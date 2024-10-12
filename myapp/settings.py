@@ -26,9 +26,9 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # settings.py
 
-TWILIO_ACCOUNT_SID = 'AC3ec8fa0cd7d5404ad216fd05ed3748dc'
-TWILIO_AUTH_TOKEN = '4b951004adc271db2d0489d2a530ba76'
-TWILIO_PHONE_NUMBER = '8591091865'
+TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+
 
 
 # Quick-start development settings - unsuitable for production
