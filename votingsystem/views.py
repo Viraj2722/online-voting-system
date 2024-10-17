@@ -1,24 +1,16 @@
 import os
 import random
-import json
 from django.shortcuts import render, redirect
 from dotenv import load_dotenv
 from twilio.rest import Client
 import psycopg2
 import socket
 
-
 load_dotenv()
-
 
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 twilio_client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-
-# Path to store OTPs
-OTP_STORAGE_FILE = 'otp_storage.json'
-
 
 connection = psycopg2.connect(
     database=os.getenv("DATABASE_NAME"),
@@ -29,27 +21,6 @@ connection = psycopg2.connect(
 )
 cursor = connection.cursor()
 
-# Function to load OTPs from file
-def load_otps():
-    try:
-        with open(OTP_STORAGE_FILE, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
-
-
-
-
-
-# Function to save OTPs to file
-def save_otps(otps):
-    with open(OTP_STORAGE_FILE, 'w') as f:
-        json.dump(otps, f)
-
-
-
-
-
 def send_otp(mobile_number, otp):
     try:
         message = twilio_client.messages.create(
@@ -57,51 +28,49 @@ def send_otp(mobile_number, otp):
             body=f"OTP for the voting is: {otp}",
             to=f'+91{mobile_number}'
         )
-        
         print(f"OTP sent to {mobile_number}: {message.sid}")
     except Exception as e:
         print(f"Error sending OTP: {e}")
         raise
 
-
-
-
-# Candidate Login Logic
 def candidate_login(request):
     if request.method == 'POST':
         voter_id = request.POST.get('voter_id')
         mobileno = request.POST.get('mobileno')
-        send_otp_button = request.POST.get('send_otp') 
-        otp_entered = request.POST.get('otp') 
+        send_otp_button = request.POST.get('send_otp')
+        otp_entered = request.POST.get('otp')
 
-
-        otps = load_otps()
-
-       
+        # Check if the voter exists
         cursor.execute(
-            'SELECT "IsVoted" FROM voter WHERE "Voterid" = %s AND "VoterNumber" = %s',
+            'SELECT "IsVoted", "otp" FROM voter WHERE "Voterid" = %s AND "VoterNumber" = %s',
             [voter_id, mobileno]
         )
         record = cursor.fetchone()
 
-        if record:
-            is_voted = record[0]
-            if is_voted:
-                return render(request, 'candidatelogin.html', {
-                    'alert_message': 'You have already voted.',
-                    'show_otp': False,
-                    'voter_id': voter_id,
-                    'mobileno': mobileno
-                })
+        if record is None:
+            return render(request, 'candidatelogin.html', {
+                'alert_message': 'Invalid Voter ID or Mobile Number.',
+                'show_otp': False,
+                'voter_id': voter_id,
+                'mobileno': mobileno
+            })
 
-           
-            request.session['voter_id'] = voter_id
-            request.session['mobileno'] = mobileno
+        is_voted = record[0]
+        stored_otp = record[1]
 
-        
+        if is_voted:
+            return render(request, 'candidatelogin.html', {
+                'alert_message': 'You have already voted.',
+                'show_otp': False,
+                'voter_id': voter_id,
+                'mobileno': mobileno
+            })
+
+        request.session['voter_id'] = voter_id
+        request.session['mobileno'] = mobileno
+
         if otp_entered:
-            stored_otp_data = otps.get(voter_id)
-            if stored_otp_data and str(stored_otp_data['otp']) == otp_entered:
+            if stored_otp and str(stored_otp) == otp_entered:
                 return redirect('candidatelist')
             else:
                 return render(request, 'candidatelogin.html', {
@@ -111,41 +80,26 @@ def candidate_login(request):
                     'mobileno': mobileno
                 })
 
-       
         if send_otp_button == 'send_otp':
-            if record and not is_voted: 
-                print(f"Send OTP clicked for voter_id: {voter_id}, mobileno: {mobileno}") 
+            if not is_voted: 
+                print(f"Send OTP clicked for voter_id: {voter_id}, mobileno: {mobileno}")
                 otp = random.randint(10000, 99999)
-                otps[voter_id] = {'otp': otp, 'mobileno': mobileno}
-                save_otps(otps)
-
-                print("OTP generated: ", otp)
+                cursor.execute(
+                    'UPDATE voter SET otp = %s WHERE "Voterid" = %s',
+                    [otp, voter_id]
+                )
+                connection.commit()
                 
-                #send_otp(mobileno, otp)
+                send_otp(mobileno, otp)
 
                 return render(request, 'candidatelogin.html', {
                     'show_otp': True,
                     'voter_id': voter_id,
                     'mobileno': mobileno
                 })
-            else:
-                return render(request, 'candidatelogin.html', {
-                    'alert_message': 'Invalid Voter ID or Mobile Number.',
-                    'show_otp': False,
-                    'voter_id': voter_id,
-                    'mobileno': mobileno
-                })
 
     return render(request, 'candidatelogin.html')
 
-
-
-
-
-
-
-
-# Candidate List Logic
 def candidate_list(request):
     political_leaders = []
     cursor.execute('SELECT "CandidateName", "CandidatePosition", "VotingCount" FROM candidatedetails')
@@ -160,12 +114,6 @@ def candidate_list(request):
 
     return render(request, 'candidatelist.html', {'political_leaders': political_leaders})
 
-
-
-
-
-
-# Logic to cast a vote
 def cast_vote(request):
     if request.method == 'POST':
         voter_id = request.session.get('voter_id')
@@ -177,7 +125,6 @@ def cast_vote(request):
                 'alert_message': 'Please log in to vote.'
             })
 
-       
         cursor.execute(
             'SELECT "IsVoted" FROM voter WHERE "Voterid" = %s',
             [voter_id]
@@ -188,7 +135,6 @@ def cast_vote(request):
                 'alert_message': 'You have already voted.'
             })
 
-      
         message = f"{voter_id} {mobilenumber} {leader_name}"
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
@@ -196,7 +142,6 @@ def cast_vote(request):
                 client_socket.connect(('127.0.0.1', 4001))
                 client_socket.send(message.encode())
 
-                
                 response = client_socket.recv(1024).decode()
                 print(f"Server response: {response}")
 
@@ -205,14 +150,12 @@ def cast_vote(request):
                         'alert_message': response,
                     })
                 else:
-                    
                     cursor.execute(
                         'UPDATE candidatedetails SET "VotingCount" = "VotingCount" + 1 WHERE "CandidateName" = %s',
                         [leader_name]
                     )
                     connection.commit()
 
-                    
                     cursor.execute(
                         'UPDATE voter SET "IsVoted" = TRUE WHERE "Voterid" = %s',
                         [voter_id]
@@ -229,15 +172,6 @@ def cast_vote(request):
 
     return render(request, 'home.html')
 
-
-
-
-
-
-
-
-
-# Logic for admin login
 def admin_login(request):
     if request.method == 'POST':
         adminid = request.POST['admin_id']
@@ -255,13 +189,7 @@ def admin_login(request):
 
     return render(request, 'adminlogin.html')
 
-
-
-
-
-# Logic for admin page (add, delete candidates, refresh)
 def admin_page(request):
-   
     political_leaders = []
     cursor.execute('SELECT "CandidateName", "CandidatePosition", "VotingCount" FROM candidatedetails')
     politicaldata = cursor.fetchall()
@@ -305,10 +233,6 @@ def admin_page(request):
     
     return render(request, 'adminpage.html', {'political_leaders': political_leaders})
 
-
-
-
-# Function to delete leader from the database
 def delete_leader(leader_name):
     cursor.execute(
         'DELETE FROM candidatedetails WHERE "CandidateName" = %s',
@@ -316,31 +240,18 @@ def delete_leader(leader_name):
     )
     connection.commit()
 
-
-
-
-
-# Logic for logging out
 def logout(request):
     if request.method == 'POST':
         if request.POST.get('logout'):
             if 'voter_id' in request.session:
                 del request.session['voter_id']
-                del request.session['mobileno']  # Clear session
+                del request.session['mobileno']  
             return redirect('home')
 
     return render(request, 'logout.html')
 
-
-
-
-# About page logic
 def about_page(request):
     return render(request, 'aboutpage.html')
 
-
-
-
-# Home page logic
 def home(request):
     return render(request, 'home.html')

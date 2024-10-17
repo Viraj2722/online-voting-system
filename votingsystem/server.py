@@ -44,13 +44,15 @@ def client_thread(conn):
             record = cursor.fetchone()
 
             if record:
-                if record[0]:  # True means already voted
-                    print(f'Vote Already Cast by ID: {voter_id}')
-                    conn.send("Error: Already voted".encode())
-                else:
+                if record[0]:  # True means already voted 
                     print(f'Voter Logged in... ID: {voter_id}')
                     print(f"Vote Received: Voter ID = {voter_id}, Candidate = {vote}")
+                    print("Voter Logged out...")
                     conn.send("Vote Received".encode())
+                else:
+                    print(f'Vote Already Cast by ID: {voter_id}')
+                    conn.send("Error: Already voted".encode())
+                    
             else:
                 print('Invalid Voter')
                 conn.send("Error: Invalid voter".encode())
