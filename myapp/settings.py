@@ -40,7 +40,7 @@ SECRET_KEY = 'django-insecure-hcjfax+&*hz1qqg7tu!47_dw2dncuq&l(ed46lj2qeyy8zi%lo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
