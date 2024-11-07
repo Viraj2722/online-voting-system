@@ -1,138 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Candidate Voting</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(
-          0deg,
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidate Voting</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(0deg,
           rgba(34, 193, 195, 1) 0%,
-          rgba(253, 187, 45, 1) 100%
-        );
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
+          rgba(253, 187, 45, 1) 100%);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
+    .container {
+      background: #ffffff;
+      opacity: 0.8;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border: none;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background-color: #007bff;
+      color: #ffffff;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #ffffff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 480px) {
       .container {
-        background: #ffffff;
-        opacity: 0.8;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        border: none;
-        width: 100%;
-        max-width: 600px;
+        max-width: 80%;
+        width: fit-content;
+        margin: 0 auto;
       }
+    }
 
-      a {
-        text-decoration: none;
+    @media (max-width: 768px) {
+      .container {
+        max-width: 90%;
+        width: fit-content;
       }
+    }
+  </style>
+  <script>
+    function confirmVote(candidateName) {
+      const confirmation = confirm(
+        `Are you sure you want to vote for ${candidateName}?`
+      );
+      return confirmation; // Submit the form if confirmed
+    }
+  </script>
+</head>
 
-      h1 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 20px;
-      }
+<body>
+  <div class="container">
+    <h1>Vote for Your Candidate</h1>
+    <form method="POST" action="{% url 'cast_vote' %}">
+      {% csrf_token %}
+      <table>
+        <tr>
+          <th>Candidate Name</th>
+          <th>Candidate Position</th>
+          <th>Click to Vote</th>
+        </tr>
+        {% for candidate in political_leaders %}
+        <tr>
+          <td>{{ candidate.leader_name }}</td>
+          <td>{{ candidate.position }}</td>
+          <td>
+            <button type="submit" name="vote" id="vote" value="{{ candidate.leader_name }}"
+              onclick="return confirmVote('{{ candidate.leader_name }}')">
+              Vote
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </form>
+  </div>
+</body>
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 30px;
-      }
-
-      th,
-      td {
-        padding: 10px;
-        border: 1px solid #ddd;
-        text-align: center;
-      }
-
-      th {
-        background-color: #007bff;
-        color: #ffffff;
-      }
-
-      tr:nth-child(even) {
-        background-color: #f2f2f2;
-      }
-
-      button {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        background-color: #007bff;
-        color: #ffffff;
-        font-size: 16px;
-        cursor: pointer;
-      }
-
-      button:hover {
-        background-color: #0056b3;
-      }
-
-      @media (max-width: 480px) {
-        .container {
-          max-width: 80%;
-          width: fit-content;
-          margin: 0 auto;
-        }
-      }
-      @media (max-width: 768px) {
-        .container {
-          max-width: 90%;
-          width: fit-content;
-        }     
-      }
-    </style>
-    <script>
-      function confirmVote(candidateName) {
-        const confirmation = confirm(
-          `Are you sure you want to vote for ${candidateName}?`
-        );
-        return confirmation; // Submit the form if confirmed
-      }
-    </script>
-  </head>
-
-  <body>
-    <div class="container">
-      <h1>Vote for Your Candidate</h1>
-      <form method="POST" action="{% url 'cast_vote' %}">
-        {% csrf_token %}
-        <table>
-          <tr>
-            <th>Candidate Name</th>
-            <th>Candidate Position</th>
-            <th>Click to Vote</th>
-          </tr>
-          {% for candidate in political_leaders %}
-          <tr>
-            <td>{{ candidate.leader_name }}</td>
-            <td>{{ candidate.position }}</td>
-            <td>
-              <button
-                type="submit"
-                name="vote"
-                id="vote"
-                value="{{ candidate.leader_name }}"
-                onclick="return confirmVote('{{ candidate.leader_name }}')"
-              >
-                Vote
-              </button>
-            </td>
-          </tr>
-          {% endfor %}
-        </table>
-      </form>
-    </div>
-  </body>
 </html>

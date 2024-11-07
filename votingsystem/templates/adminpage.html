@@ -259,6 +259,8 @@
       }
     }
   </style>
+
+  <!-- Logout Button -->
   <form method="POST" action="{% url 'home' %}">
     {% csrf_token %}
     <button class="top-right-button" name="logout" id="logout" type="submit" value="logout">
@@ -269,7 +271,7 @@
   <h1>Admin Page</h1>
 
   <!-- Form to Add Political Leader -->
-  <form method="POST" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data" action="{% url 'adminpage' %}">
     {% csrf_token %}
     <div class="input-group">
       <label for="leader_name">Political Leader</label>
@@ -280,31 +282,36 @@
       <input type="text" name="position" id="position" required />
     </div>
     <button type="submit" name="action" value="add">Add Candidate</button>
-    <button type="submit" name="action" value="start">
-      Start Live Voting
-    </button>
   </form>
 
+  <!-- Separate Form for Live Voting -->
+  <form method="POST" action="{% url 'adminpage' %}">
+    {% csrf_token %}
+    {% if request.session.live_voting_enabled %}
+    <button type="submit" name="action" value="stop_live_voting">Stop Live Voting</button>
+    {% else %}
+    <button type="submit" name="action" value="start_live_voting">Start Live Voting</button>
+    {% endif %}
+  </form>
 
-  <!-- List of Added Political Leaders -->
+  <!-- Candidate List -->
   <div class="Cand_list">
     <h2>Candidate List</h2>
     <ul>
       {% for leader in political_leaders %}
       <li>
         {{ leader.leader_name }} - {{ leader.position }}
-        <form method="POST" style="display: inline">
+        <form method="POST" style="display: inline" action="{% url 'adminpage' %}">
           {% csrf_token %}
           <input type="hidden" name="leader_name" value="{{ leader.leader_name }}" />
-          <button type="submit" name="action" value="delete" id="delete">
-            Delete
-          </button>
+          <button type="submit" name="action" value="delete" id="delete">Delete</button>
         </form>
       </li>
       {% endfor %}
     </ul>
   </div>
 
+  <!-- Voting Count Table -->
   <div class="votecount">
     <h2>Voting Count</h2>
     <table>
@@ -319,17 +326,16 @@
         <tr>
           <td>{{ leader.leader_name }} - {{ leader.position }}</td>
           <td>{{ leader.Votingcount }}</td>
-          <!-- Assuming `vote_count` is available -->
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    <form method="POST">
+    <form method="POST" action="{% url 'adminpage' %}">
       {% csrf_token %}
       <button type="submit" name="action" value="refresh" id="refresh">Refresh</button>
     </form>
   </div>
-  </div>
+
 </body>
 
 </html>

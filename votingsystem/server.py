@@ -49,9 +49,7 @@ def client_thread(conn):
                     print(f"Vote Received: Voter ID = {voter_id}, Candidate = {vote}")
                     print("Voter Logged out...")
                     conn.send("Vote Received".encode())
-                else:
-                    print(f'Vote Already Cast by ID: {voter_id}')
-                    conn.send("Error: Already voted".encode())
+                
                     
             else:
                 print('Invalid Voter')
