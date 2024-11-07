@@ -202,44 +202,6 @@ def admin_login(request):
 
     return render(request, 'adminlogin.html')
 
-def admin_page(request):
-    political_leaders = []
-    cursor.execute('SELECT "CandidateName", "CandidatePosition", "VotingCount" FROM candidatedetails')
-    politicaldata = cursor.fetchall()
-
-    for i in politicaldata:
-        political_leaders.append({
-            'leader_name': i[0],
-            'position': i[1],
-            'Votingcount': i[2]
-        })
-
-    if request.method == 'POST':
-        action = request.POST.get('action')
-
-        if action == 'start_live_voting':
-            request.session['live_voting_enabled'] = True
-            return redirect('adminpage')
-
-        elif action == 'stop_live_voting':
-            request.session['live_voting_enabled'] = False
-            return redirect('adminpage')
-
-        elif action == 'add':
-            leader_name = request.POST['leader_name']
-            position = request.POST['position']
-
-            cursor.execute(
-                'INSERT INTO candidatedetails ("CandidateName", "CandidatePosition", "VotingCount") VALUES (%s, %s, 0)',
-                [leader_name, position]
-            )
-            connection.commit()
-            return redirect('adminpage')
-
-        elif action == 'delete':
-            leader_name
-
-
 def admin_page(request): 
     # Fetch the list of candidates from the database
     political_leaders = []
