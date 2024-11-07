@@ -89,9 +89,9 @@ def candidate_login(request):
                     [otp, voter_id]
                 )
                 connection.commit()
-                print(f"OTP sent for voter_id: {voter_id} to mobile: {mobileno} with OTP: {otp}")
-                #send_otp(mobileno, otp)  # Send OTP via Twilio
-                print("otp send", otp)
+                
+                send_otp(mobileno, otp)  # Send OTP via Twilio
+
                 return render(request, 'candidatelogin.html', {
                     'show_otp': True,
                     'voter_id': voter_id,
@@ -150,7 +150,7 @@ def cast_vote(request):
                 client_socket.send(message.encode())
 
                 response = client_socket.recv(1024).decode()
-                print(f"Server response: {response}")
+               
 
                 if response.startswith("Error"):  # Error response from the server
                     return render(request, 'candidatelogin.html', {
