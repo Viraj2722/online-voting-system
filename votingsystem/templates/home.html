@@ -5,97 +5,182 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Online Voting System</title>
-</head>
-
-<body>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      background: rgb(34, 193, 195);
-      background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
-      font-family: Arial, sans-serif;
       margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
-      background-size: cover;
       height: 100vh;
       overflow: hidden;
+      position: relative;
+      background: linear-gradient(45deg, rgba(34, 193, 195, 0.8), rgba(253, 187, 45, 0.8));
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      font-family: 'Poppins', sans-serif;
     }
 
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-style: italic;
+      color: transparent;
+      background: linear-gradient(90deg, #007bff, #6610f2);
+      -webkit-background-clip: text;
+      background-clip: text;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes textAnimation {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
 
     button {
       margin: 10px 0;
-      padding: 10px 20px;
+      padding: 15px 30px;
       background-color: #007bff;
       color: #fff;
       border: none;
-      border-radius: 5px;
-      font-size: 18px;
+      border-radius: 10px;
+      font-size: 1.2rem;
       cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    div {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 12vh;
-    }
-
-    a {
-      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+      width: 100%;
+      font-weight: 600;
     }
 
     button:hover {
       background-color: #0069d9;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
     }
 
     button:active {
       background-color: #0056b3;
       transform: translateY(2px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    h1 {
-      font-style: italic;
-      text-align: center;
-      color: rgb(71, 0, 171);
     }
 
     .about-us {
-      margin-top: 0.5rem;
       position: absolute;
       background: linear-gradient(45deg, #28a745, #218838);
-      top: 10px;
-      right: 10px;
+      top: 20px;
+      right: 20px;
       border: none;
       border-radius: 50%;
-      font-size: 26px;
-      padding: 10px 20px;
-      gap: 8px;
+      font-size: 24px;
+      padding: 15px;
       cursor: pointer;
       transition: background 0.3s ease, box-shadow 0.3s ease;
-      float: right;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .about-us:hover {
       background: linear-gradient(45deg, #218838, #1e7e34);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0. 2);
     }
 
     .about-us:active {
       transform: translateY(2px);
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
     }
+
+    a {
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      button {
+        font-size: 1rem;
+        padding: 12px 20px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .about-us {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      button {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      .about-us {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+      }
+    }
   </style>
-  <a href="{% url 'aboutpage' %}"><button class="about-us"><svg xmlns="http://www.w3.org/2000/svg" width="16"
-        height="16" fill="currentColor" class="bi bi-info-square-fill" viewBox="0 0 16 16">
-        <path
-          d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
-      </svg></button></a>
-  <div>
+</head>
+
+<body>
+  <a href="{% url 'aboutpage' %}">
+    <button class="about-us"><i class="fas fa-info-circle"></i></button>
+  </a>
+  <div class="container">
     <h1>Welcome to the Online Voting System</h1>
     <a href="{% url 'adminlogin' %}">
       <button>Admin Login</button>

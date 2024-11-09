@@ -5,44 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-</head>
-
-<body>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         html,
         body {
             height: 100%;
             margin: 0;
             padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: rgb(34, 193, 195);
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
-            margin: 0;
-            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        a {
-            text-decoration: none;
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
         }
 
         h1 {
             text-align: center;
+            color: #2c1291;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
-        form,
-        a {
+        form {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 20px;
         }
 
         form label {
             margin: 10px 0;
             font-weight: bold;
+            color: #333;
+            font-size: 1.2rem;
         }
 
         form input[type="text"] {
@@ -50,11 +59,11 @@
             margin: 10px 0;
             border-radius: 5px;
             border: 1px solid #ddd;
+            width: 100%;
+            font-size: 1rem;
         }
 
         button {
-            display: block;
-            margin: 0 auto;
             padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
@@ -62,7 +71,9 @@
             border-radius: 5px;
             font-size: 18px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
+            width: 100%;
+            margin-top: 20px;
         }
 
         button:hover {
@@ -74,23 +85,46 @@
             transform: translateY(2px);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            form {
+                padding: 20px;
+            }
+
+            form label {
+                font-size: 1rem;
+            }
+
+            form input[type="text"] {
+                font-size: 0.9rem;
+            }
+
+            button {
+                font-size: 16px;
+            }
+        }
     </style>
-    <h1>Admin Login</h1>
-    <form method="POST" action="{% url 'adminlogin' %}">
-        {% csrf_token %}
-        <label for="admin_id">Admin ID:</label><br>
-        <input type="text" id="admin_id" name="admin_id" required><br><br>
+</head>
 
-        <button type="submit">Login</button>
+<body>
+    <div class="container">
+        <h1>Admin Login</h1>
+        <form method="POST" action="{% url 'adminlogin' %}">
+            {% csrf_token %}
+            <label for="admin_id">Admin ID:</label>
+            <input type="text" id="admin_id" name="admin_id" required>
 
-        {% if alert_admin_message %}
-        <script>alert("{{ alert_admin_message }}");</script>
-        {% endif %}
+            <button type="submit">Login</button>
 
-    </form>
-
-
-
+            {% if alert_admin_message %}
+            <script>alert("{{ alert_admin_message }}");</script>
+            {% endif %}
+        </form>
+    </div>
 </body>
 
 </html>

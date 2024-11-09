@@ -5,12 +5,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voting Disabled</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef;
+            color: #343a40;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #c0392b;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+            padding: 10px 15px;
+            border: 2px solid #2980b9;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Voting Not Enabled</h1>
-    <p>{{ alert_message }}</p>
-    <a href="{% url 'home' %}">Return to Home</a>
+    <div class="container">
+        <h1>Voting Not Enabled</h1>
+        <p>{{ alert_message }}</p>
+        <a href="{% url 'home' %}">Return to Home</a>
+    </div>
 </body>
 
 </html>

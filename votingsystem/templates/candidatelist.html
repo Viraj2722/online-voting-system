@@ -7,10 +7,8 @@
   <title>Candidate Voting</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(0deg,
-          rgba(34, 193, 195, 1) 0%,
-          rgba(253, 187, 45, 1) 100%);
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
       margin: 0;
       padding: 0;
       display: flex;
@@ -20,24 +18,24 @@
     }
 
     .container {
-      background: #ffffff;
-      opacity: 0.8;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      border: none;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      padding: 30px;
       width: 100%;
       max-width: 600px;
+      transition: transform 0.3s;
     }
 
-    a {
-      text-decoration: none;
+    .container:hover {
+      transform: translateY(-5px);
     }
 
     h1 {
       text-align: center;
       color: #333;
       margin-bottom: 20px;
+      font-size: 24px;
     }
 
     table {
@@ -48,7 +46,7 @@
 
     th,
     td {
-      padding: 10px;
+      padding: 12px;
       border: 1px solid #ddd;
       text-align: center;
     }
@@ -56,10 +54,11 @@
     th {
       background-color: #007bff;
       color: #ffffff;
+      font-weight: bold;
     }
 
     tr:nth-child(even) {
-      background-color: #f2f2f2;
+      background-color: #f9f9f9;
     }
 
     button {
@@ -72,32 +71,54 @@
       color: #ffffff;
       font-size: 16px;
       cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
     }
 
     button:hover {
       background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    button:active {
+      background-color: #004494;
+      transform: scale(0.95);
     }
 
     @media (max-width: 480px) {
       .container {
-        max-width: 80%;
-        width: fit-content;
-        margin: 0 auto;
+        max-width: 90%;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 8px;
       }
     }
 
     @media (max-width: 768px) {
       .container {
         max-width: 90%;
-        width: fit-content;
+        padding: 25px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      button {
+        font-size: 15px;
+        padding: 9px;
       }
     }
   </style>
   <script>
     function confirmVote(candidateName) {
-      const confirmation = confirm(
-        `Are you sure you want to vote for ${candidateName}?`
-      );
+      const confirmation = confirm(`Are you sure you want to vote for ${candidateName}?`);
       return confirmation; // Submit the form if confirmed
     }
   </script>

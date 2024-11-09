@@ -6,41 +6,48 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Us</title>
-</head>
-
-<body>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 0;
-      background: rgb(34, 193, 195);
-      background: linear-gradient(0deg,
-          rgba(34, 193, 195, 1) 0%,
-          rgba(253, 187, 45, 1) 100%);
+      background: linear-gradient(0deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      overflow: hidden;
+      animation: gradient 15s ease infinite;
+    }
+
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
     h1 {
-      font-family: Arial;
       font-size: 2.5em;
       text-align: center;
       color: #2c1291;
       margin-bottom: 20px;
     }
 
-
-
     .about-us-container {
       display: flex;
       justify-content: space-around;
       align-items: center;
-      flex-wrap: nowrap;
-      overflow-x: auto;
+      flex-wrap: wrap;
       width: 100%;
       padding: 20px;
     }
@@ -50,7 +57,6 @@
       border-radius: 15px;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
       width: 300px;
-      /* Fixed card width */
       margin: 20px;
       text-align: center;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -59,7 +65,7 @@
     .card img {
       border-radius: 15px 15px 0 0;
       width: 100%;
-      height: 400px;
+      height: 250px;
       object-fit: cover;
       background: linear-gradient(135deg, #007bff, #00c6ff);
     }
@@ -81,63 +87,58 @@
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
     }
 
-    @media (max-width: 768px) {
-      body {
-        display: flex;
-        background-color: transparent;
-      }
+    .about-us {
+      position: absolute;
+      background: linear-gradient(45deg, #28a745, #218838);
+      top: 20px;
+      right: 20px;
+      border: none;
+      border-radius: 50%;
+      font-size: 26px;
+      padding: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
+    .about-us:hover {
+      background: linear-gradient(45deg, #218838, #1e7e34);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .about-us:active {
+      transform: translateY(2px);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 768px) {
       h1 {
-        font-size: 3rem;
-        top: 100px;
-        position: fixed;
+        font-size: 2rem;
       }
 
       .card {
-        max-width: 70%;
-        margin-left: 40px;
-        margin-bottom: 10px;
-        height: 90%;
-      }
-
-      .card img {
-        height: 100px;
-        width: 100%;
+        max-width: 80%;
       }
     }
 
     @media (max-width: 480px) {
-      body {
-        font-size: x-small;
-        display: flex;
-        background-color: transparent;
-      }
-
       h1 {
-        font-size: 3rem;
+        font-size: 1.5rem;
       }
 
       .about-us-container {
-        display: grid;
-        height: auto;
+        flex-direction: column;
         align-items: center;
-        grid-template-columns: repeat(2, 1fr);
       }
 
       .card {
-        max-width: 70%;
-        margin-left: 40px;
-        margin-bottom: 10px;
-        height: 90%;
-      }
-
-      .card img {
-        height: 100px;
-        width: 100%;
+        max-width: 90%;
       }
     }
   </style>
+</head>
 
+<body>
   <h1>Team</h1>
 
   <div class="about-us-container">
@@ -156,14 +157,13 @@
     <div class="card">
       <img src="https://via.placeholder.com/300x250/28a745/ffffff?text=Bhavik+Solanki" alt="Bhavik Solanki" />
       <h3>Bhavik Solanki</h3>
-      <p>BackendDeveloper</p>
+      <p>Backend Developer</p>
     </div>
 
     <div class="card">
-      <!-- <img src="{% static 'images/viraj.jpg' %}" alt="Viraj Walavalkar"> -->
       <img src="https://via.placeholder.com/300x250/10b656/ffffff?text=Viraj+Walavalkar" alt="Viraj Walavalkar" />
       <h3>Viraj Walavalkar</h3>
-      <p>Developer</p>
+      <p>Full-stack Developer</p>
     </div>
   </div>
 </body>
