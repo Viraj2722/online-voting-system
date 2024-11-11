@@ -54,7 +54,8 @@
             font-size: 1.2rem;
         }
 
-        form input[type="text"] {
+        form input[type="text"],
+        form input[type="password"] {
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
@@ -99,7 +100,8 @@
                 font-size: 1rem;
             }
 
-            form input[type="text"] {
+            form input[type="text"],
+            form input[type="password"] {
                 font-size: 0.9rem;
             }
 
@@ -117,6 +119,9 @@
             {% csrf_token %}
             <label for="admin_id">Admin ID:</label>
             <input type="text" id="admin_id" name="admin_id" required>
+
+            <label for="admin_password">Password:</label>
+            <input type="password" id="admin_password" name="admin_password" required>
 
             <button type="submit">Login</button>
 
